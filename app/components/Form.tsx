@@ -1,13 +1,21 @@
 import { useForm } from "react-hook-form"
 import { FormField } from "./FormField"
-import { FormData } from "@/types"
+import { FormData, UserSchema } from "@/types"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 export const Form = () => {
   // The useForm hook provides form-related functions
   // Type it to define the shape of the form data
-  const { register, handleSubmit, formState: { errors }, setError } = useForm<FormData>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError
+  } = useForm<FormData>({
+    resolver: zodResolver(UserSchema) // integrate the schema validation with the the form validation
+  })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log(data)
   }
 
@@ -38,6 +46,7 @@ export const Form = () => {
           name="yearsOfExperience"
           register={register}
           error={errors.yearsOfExperience}
+          valueAsNumber
         />
         <FormField
           type="password"
